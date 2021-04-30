@@ -435,8 +435,8 @@ uint64_t TxnManager::get_commit_rsp_cnt()
 //broadcasts prepare message to all nodes
 void TxnManager::send_pbft_prep_msgs()
 {
-    //printf("%ld Send PBFT_PREP_MSG message to %d nodes\n", get_txn_id(), g_node_cnt - 1);
-    //fflush(stdout);
+    printf("%ld Send PBFT_PREP_MSG message to %d nodes\n", get_txn_id(), g_node_cnt - 1);
+    fflush(stdout);
 
     Message *msg = Message::create_message(this, PBFT_PREP_MSG);
     PBFTPrepMessage *pmsg = (PBFTPrepMessage *)msg;
@@ -466,8 +466,8 @@ void TxnManager::send_pbft_prep_msgs()
 //broadcasts commit message to all nodes
 void TxnManager::send_pbft_commit_msgs()
 {
-    //cout << "Send PBFT_COMMIT_MSG messages " << get_txn_id() << "\n";
-    //fflush(stdout);
+    cout << "Send PBFT_COMMIT_MSG messages " << get_txn_id() << "\n";
+    fflush(stdout);
 
     Message *msg = Message::create_message(this, PBFT_COMMIT_MSG);
     PBFTCommitMessage *cmsg = (PBFTCommitMessage *)msg;

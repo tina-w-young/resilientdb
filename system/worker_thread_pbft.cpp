@@ -28,8 +28,9 @@
  */
 RC WorkerThread::process_client_batch(Message *msg)
 {
-    //printf("ClientQueryBatch: %ld, THD: %ld :: CL: %ld :: RQ: %ld\n",msg->txn_id, get_thd_id(), msg->return_node_id, clbtch->cqrySet[0]->requests[0]->key);
-    //fflush(stdout);
+    printf("TINA :: Pre-prepare message HERE");
+    printf("ClientQueryBatch: %ld, THD: %ld :: CL: %ld :: RQ: %ld\n",msg->txn_id, get_thd_id(), msg->return_node_id, clbtch->cqrySet[0]->requests[0]->key);
+    fflush(stdout);
 
     ClientQueryBatch *clbtch = (ClientQueryBatch *)msg;
 
@@ -50,6 +51,7 @@ RC WorkerThread::process_client_batch(Message *msg)
 
     // Initialize all transaction mangers and Send BatchRequests message.
     create_and_send_batchreq(clbtch, clbtch->txn_id);
+    printf("TINA :: batch request sent");
 
     return RCOK;
 }
@@ -69,12 +71,14 @@ RC WorkerThread::process_client_batch(Message *msg)
  */
 RC WorkerThread::process_batch(Message *msg)
 {
+    printf("TINA :: non-primary processing incoming batchrequests from primary");
+    printf("TINA :: prepare phase");
     uint64_t cntime = get_sys_clock();
 
     BatchRequests *breq = (BatchRequests *)msg;
 
-    //printf("BatchRequests: TID:%ld : VIEW: %ld : THD: %ld\n",breq->txn_id, breq->view, get_thd_id());
-    //fflush(stdout);
+    printf("BatchRequests: TID:%ld : VIEW: %ld : THD: %ld\n",breq->txn_id, breq->view, get_thd_id());
+    fflush(stdout);
 
     // Assert that only a non-primary replica has received this message.
     assert(g_node_id != get_current_view(get_thd_id()));
@@ -195,8 +199,8 @@ RC WorkerThread::process_batch(Message *msg)
  */
 RC WorkerThread::process_pbft_prep_msg(Message *msg)
 {
-    //cout << "PBFTPrepMessage: TID: " << msg->txn_id << " FROM: " << msg->return_node_id << endl;
-    //fflush(stdout);
+    cout << "PBFTPrepMessage: TID: " << msg->txn_id << " FROM: " << msg->return_node_id << endl;
+    fflush(stdout);
 
     // Start the counter for prepare phase.
     if (txn_man->prep_rsp_cnt == 2 * g_min_invalid_nodes)
@@ -233,8 +237,8 @@ RC WorkerThread::process_pbft_prep_msg(Message *msg)
  */
 bool WorkerThread::committed_local(PBFTCommitMessage *msg)
 {
-    //cout << "Check Commit: TID: " << txn_man->get_txn_id() << "\n";
-    //fflush(stdout);
+    cout << "Check Commit: TID: " << txn_man->get_txn_id() << "\n";
+    fflush(stdout);
 
     // Once committed is set for this transaction, no further processing.
     if (txn_man->is_committed())
@@ -245,8 +249,8 @@ bool WorkerThread::committed_local(PBFTCommitMessage *msg)
     // If BatchRequests messages has not arrived, then hash is empty; return false.
     if (txn_man->get_hash().empty())
     {
-        //cout << "hash empty: " << txn_man->get_txn_id() << "\n";
-        //fflush(stdout);
+        cout << "hash empty: " << txn_man->get_txn_id() << "\n";
+        fflush(stdout);
         txn_man->info_commit.push_back(msg->return_node);
         return false;
     }
@@ -284,8 +288,8 @@ bool WorkerThread::committed_local(PBFTCommitMessage *msg)
  */
 RC WorkerThread::process_pbft_commit_msg(Message *msg)
 {
-    //cout << "PBFTCommitMessage: TID " << msg->txn_id << " FROM: " << msg->return_node_id << "\n";
-    //fflush(stdout);
+    cout << "PBFTCommitMessage: TID " << msg->txn_id << " FROM: " << msg->return_node_id << "\n";
+    fflush(stdout);
 
     if (txn_man->commit_rsp_cnt == 2 * g_min_invalid_nodes + 1)
     {

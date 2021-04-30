@@ -95,6 +95,7 @@ void WorkerThread::process(Message *msg)
         break;
     case CL_BATCH:
         rc = process_client_batch(msg);
+        printf("TINA :: going to worker_thread_pbft, process_client_batch");
         break;
     case BATCH_REQ:
         rc = process_batch(msg);
@@ -1180,13 +1181,14 @@ void WorkerThread::set_txn_man_fields(BatchRequests *breq, uint64_t bid)
 void WorkerThread::create_and_send_batchreq(ClientQueryBatch *msg, uint64_t tid)
 {
     // Creating a new BatchRequests Message.
+    printf("TINA :: creating BatchRequests Message");
     Message *bmsg = Message::create_message(BATCH_REQ);
     BatchRequests *breq = (BatchRequests *)bmsg;
     breq->init(get_thd_id());
 
     // Starting index for this batch of transactions.
     next_set = tid;
-
+    printf("TINA :: starting tid, " , next_set);
     // String of transactions in a batch to generate hash.
     string batchStr;
 
@@ -1195,7 +1197,7 @@ void WorkerThread::create_and_send_batchreq(ClientQueryBatch *msg, uint64_t tid)
     {
         uint64_t txn_id = get_next_txn_id() + i;
 
-        //cout << "Txn: " << txn_id << " :: Thd: " << get_thd_id() << "\n";
+        cout << "Txn: " << txn_id << " :: Thd: " << get_thd_id() << "\n";
         //fflush(stdout);
         txn_man = get_transaction_manager(txn_id, 0);
 

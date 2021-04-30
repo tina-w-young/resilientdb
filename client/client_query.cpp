@@ -19,6 +19,7 @@ void Client_query_queue::init()
     {
         pthread_create(&p_thds[i], NULL, initQueriesHelper, this);
         pthread_setname_np(p_thds[i], "clientquery");
+        printf("TINA :: client query thread id ", i );
     }
 
     initQueriesHelper(this);
