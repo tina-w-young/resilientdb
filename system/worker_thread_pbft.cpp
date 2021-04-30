@@ -29,7 +29,7 @@
 RC WorkerThread::process_client_batch(Message *msg)
 {
     printf("TINA :: Pre-prepare message HERE");
-    printf("ClientQueryBatch: %ld, THD: %ld :: CL: %ld :: RQ: %ld\n",msg->txn_id, get_thd_id(), msg->return_node_id, clbtch->cqrySet[0]->requests[0]->key);
+    //printf("ClientQueryBatch: %ld, THD: %ld :: CL: %ld :: RQ: %ld\n",msg->txn_id, get_thd_id(), msg->return_node_id, clbtch->cqrySet[0]->requests[0]->key);
     fflush(stdout);
 
     ClientQueryBatch *clbtch = (ClientQueryBatch *)msg;
