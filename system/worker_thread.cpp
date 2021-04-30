@@ -1188,7 +1188,7 @@ void WorkerThread::create_and_send_batchreq(ClientQueryBatch *msg, uint64_t tid)
 
     // Starting index for this batch of transactions.
     next_set = tid;
-    printf("TINA :: starting tid, " , next_set);
+    cout<<"TINA :: starting tid, " <<next_set<<endl;
     // String of transactions in a batch to generate hash.
     string batchStr;
 
